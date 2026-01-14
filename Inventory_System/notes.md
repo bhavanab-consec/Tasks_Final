@@ -1,32 +1,34 @@
+
+````md
 # High-Concurrency Inventory System – Notes
 
 ## Steps to Run
 
 1. **Activate the virtual environment**
-   ```powershell
-   .\venv\Scripts\Activate.ps1
+```powershell
+.\venv\Scripts\Activate.ps1
 ````
 
 2. **Create / reset the database**
 
-   * Ensure `inventory_db` exists.
-   * To create a fresh database, run:
+* Ensure `inventory_db` exists.
+* To create a fresh database, run:
 
-     ```bash
-     python init_db.py
-     ```
+```bash
+python init_db.py
+```
 
 3. **Start the API server** (open a new terminal)
 
-   ```bash
-   hypercorn app:app --bind 0.0.0.0:8000 --workers 4
-   ```
+```bash
+hypercorn app:app --bind 0.0.0.0:8000 --workers 4
+```
 
 4. **Run the load test** (open a third terminal)
 
-   ```bash
-   python proof_of_correctness.py
-   ```
+```bash
+python proof_of_correctness.py
+```
 
 ---
 
@@ -106,32 +108,32 @@ purchased_at DATETIME (auto timestamp)
 
 2. Fetch inventory row
 
-   ```python
-   inv_row = sess.execute(
-       select(inventory_tbl.c.id, inventory_tbl.c.stock)
-       .where(inventory_tbl.c.item_name == item_name)
-   ).first()
-   ```
+```python
+inv_row = sess.execute(
+    select(inventory_tbl.c.id, inventory_tbl.c.stock)
+    .where(inventory_tbl.c.item_name == item_name)
+).first()
+```
 
 3. Atomic decrement
 
-   ```python
-   update(inventory_tbl)
-       .where(inventory_tbl.c.id == inv_row.id)
-       .where(inventory_tbl.c.stock > 0)
-       .values(stock=inventory_tbl.c.stock - 1)
-   ```
+```python
+update(inventory_tbl)
+    .where(inventory_tbl.c.id == inv_row.id)
+    .where(inventory_tbl.c.stock > 0)
+    .values(stock=inventory_tbl.c.stock - 1)
+```
 
 4. Insert purchase record
 
-   ```python
-   insert(purchase_tbl).values(item_id=inv_row.id)
-   ```
+```python
+insert(purchase_tbl).values(item_id=inv_row.id)
+```
 
 5. Return response
 
-   * `200 OK` → purchase successful
-   * `410 GONE` → sold out
+* `200 OK` → purchase successful
+* `410 GONE` → sold out
 
 ### Error Handling
 
@@ -226,5 +228,4 @@ requests==2.31.0
 * Robust handling of database contention and retries
 * Production-ready for Python + SQLite workloads
 
----
-
+```
