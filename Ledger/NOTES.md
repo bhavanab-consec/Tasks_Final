@@ -1,27 +1,29 @@
+
+````md
 # Legacy Ledger Refactoring Notes
 
 ## Steps to Run
 
 1. **Activate the virtual environment**
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
+```powershell
+.\.venv\Scripts\Activate.ps1
 ````
 
 2. **Install dependencies**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 3. **Run the application**
 
-   ```bash
-   python -m uvicorn legacy_ledger:app
-   ```
+```bash
+python -m uvicorn legacy_ledger:app
+```
 
 4. **Open API documentation (optional)**
 
-   * Visit: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+* Visit: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
 
@@ -58,12 +60,12 @@ This refactoring addresses both issues while **preserving API compatibility** wi
 
 * Replaced raw SQL with **parameterized queries**
 
-  ```python
-  cursor.execute(
-      "SELECT id, username, role FROM users WHERE username = ?",
-      (q,)
-  )
-  ```
+```python
+cursor.execute(
+    "SELECT id, username, role FROM users WHERE username = ?",
+    (q,)
+)
+```
 
 * Added **Pydantic models** for request validation
 
@@ -102,9 +104,9 @@ async def _process_transaction(user_id: int, amount: float):
 
 * Logs show delayed execution after immediate response:
 
-  ```text
-  [WARN] Transaction failed: user 99 not found
-  ```
+```text
+[WARN] Transaction failed: user 99 not found
+```
 
 * API returns `200 OK` immediately, proving responsiveness
 
@@ -222,5 +224,4 @@ if cursor.rowcount == 0:
 * Data integrity preserved with atomic transactions
 * API compatibility with legacy service maintained
 
----
-
+```
