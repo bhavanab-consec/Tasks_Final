@@ -1,44 +1,41 @@
 
+````md
 # Firehose Collector – Architecture Overview
 
 ## Steps to Run
 
 1. **Create and activate the virtual environment**
-   ```powershell
-   .\.venv\Scripts\Activate.ps1
+```powershell
+.\.venv\Scripts\Activate.ps1
 ````
 
 2. **Install dependencies**
 
-   ```bash
-   pip install -r requirements.txt
-   ```
+```bash
+pip install -r requirements.txt
+```
 
 3. **Start the FastAPI server**
 
-   ```bash
-   uvicorn main:app --host 127.0.0.1 --port 8000 --log-level info
-   ```
+```bash
+uvicorn main:app --host 127.0.0.1 --port 8000 --log-level info
+```
 
 4. **Open API documentation**
 
-   * Visit: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+* Visit: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 5. **Load testing (1,000+ concurrent requests)**
 
-   * Open a new terminal and run:
-
-     ```bash
-     python load_test.py
-     ```
+```bash
+python load_test.py
+```
 
 6. **Test resilience (simulate database outage)**
 
-   * Open another terminal and run:
-
-     ```powershell
-     Invoke-WebRequest -Uri "http://127.0.0.1:8000/simulate_outage" -Method POST
-     ```
+```powershell
+Invoke-WebRequest -Uri "http://127.0.0.1:8000/simulate_outage" -Method POST
+```
 
 ---
 
@@ -61,19 +58,18 @@ The system ensures:
 
 * Accepts JSON payload:
 
-  ```json
-  {
-    "user_id": 123,
-    "timestamp": "2026-01-12T16:00:00Z",
-    "metadata": {
-      "action": "click",
-      "page": "/home"
-    }
+```json
+{
+  "user_id": 123,
+  "timestamp": "2026-01-12T16:00:00Z",
+  "metadata": {
+    "action": "click",
+    "page": "/home"
   }
-  ```
+}
+```
 
 * Responds immediately with **HTTP 202 Accepted**
-
 * Does **not wait** for database writes to complete
 
 ---
@@ -159,5 +155,4 @@ The system ensures:
   * **Non-blocking**
   * Well-suited for **high-traffic analytics pipelines**
 
----
-
+```
